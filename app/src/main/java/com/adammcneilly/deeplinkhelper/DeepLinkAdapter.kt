@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class DeepLinkAdapter : RecyclerView.Adapter<DeepLinkAdapter.DeepLinkViewHolder>() {
+class DeepLinkAdapter(private val deepLinkClicked: (DeepLink) -> Unit) : RecyclerView.Adapter<DeepLinkAdapter.DeepLinkViewHolder>() {
     var deepLinks: List<DeepLink> = emptyList()
         set(value) {
             field = value
@@ -25,14 +25,17 @@ class DeepLinkAdapter : RecyclerView.Adapter<DeepLinkAdapter.DeepLinkViewHolder>
     }
 
     override fun onBindViewHolder(holder: DeepLinkViewHolder, position: Int) {
-        holder.bindDeepLink(deepLinks[position])
+        holder.bindDeepLink(deepLinks[position], deepLinkClicked)
     }
 
     class DeepLinkViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val uriTextView = view.findViewById<TextView>(R.id.uri)
 
-        fun bindDeepLink(deepLink: DeepLink) {
+        fun bindDeepLink(deepLink: DeepLink, deepLinkClicked: (DeepLink) -> Unit) {
             uriTextView.text = deepLink.uri
+            itemView.setOnClickListener {
+                deepLinkClicked.invoke(deepLink)
+            }
         }
     }
 }

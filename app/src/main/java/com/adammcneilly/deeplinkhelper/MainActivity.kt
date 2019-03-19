@@ -12,7 +12,7 @@ import com.adammcneilly.deeplinkhelper.data.DLDatabase
 import com.adammcneilly.deeplinkhelper.data.DLRepository
 
 class MainActivity : AppCompatActivity() {
-    private val adapter = DeepLinkAdapter()
+    private val adapter = DeepLinkAdapter(this::deepLinkClicked)
     private lateinit var viewModel: MainActivityViewModel
 
     private val viewModelFactory = object : ViewModelProvider.Factory {
@@ -23,6 +23,10 @@ class MainActivity : AppCompatActivity() {
             @Suppress("UNCHECKED_CAST")
             return MainActivityViewModel(repository) as T
         }
+    }
+
+    private fun deepLinkClicked(deepLink: DeepLink) {
+        viewModel.deepLinkClicked(deepLink)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
