@@ -9,7 +9,7 @@ import com.adammcneilly.deeplinkhelper.DeepLink
 
 @Dao
 interface DeepLinkDAO {
-    @Query("SELECT * FROM DeepLink ORDER BY lastTimeSent")
+    @Query("SELECT * FROM DeepLink ORDER BY lastTimeSent DESC")
     fun getAll(): LiveData<List<DeepLink>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

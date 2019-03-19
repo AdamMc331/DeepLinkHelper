@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Deep Link Helper</string>
+    <string name="send">Send</string>
+    <string name="deep_link_uri">Deep Link URI</string>
 </resources>

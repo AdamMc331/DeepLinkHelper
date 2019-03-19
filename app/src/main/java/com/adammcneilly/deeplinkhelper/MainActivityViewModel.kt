@@ -15,7 +15,8 @@ class MainActivityViewModel(
         Log.d("ARM", "Deep link clicked: $deepLink")
     }
 
-    fun deepLinkSent(deepLink: DeepLink) {
+    fun deepLinkSent(uri: String) {
+        val deepLink = DeepLink(uri)
         repository.insert(deepLink)
     }
 }

@@ -1,6 +1,7 @@
 package com.adammcneilly.deeplinkhelper
 
 import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -10,10 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adammcneilly.deeplinkhelper.data.DLDatabase
 import com.adammcneilly.deeplinkhelper.data.DLRepository
+import com.google.android.material.textfield.TextInputEditText
 
 class MainActivity : AppCompatActivity() {
     private val adapter = DeepLinkAdapter(this::deepLinkClicked)
     private lateinit var viewModel: MainActivityViewModel
+
+    private var uriInput: TextInputEditText? = null
 
     private val viewModelFactory = object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(p0: Class<T>): T {
@@ -33,8 +37,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setupViews()
         setupViewModel()
         setupRecyclerView()
+        setupSendButton()
+    }
+
+    private fun setupViews() {
+        uriInput = findViewById(R.id.uri_input)
     }
 
     private fun setupRecyclerView() {
@@ -49,5 +59,13 @@ class MainActivity : AppCompatActivity() {
         viewModel.deepLinks.observe(this, Observer {
             it?.let(adapter::deepLinks::set)
         })
+    }
+
+    private fun setupSendButton() {
+        findViewById<Button>(R.id.send_button).setOnClickListener {
+            val input = uriInput?.text.toString()
+            viewModel.deepLinkSent(input)
+            uriInput?.setText("")
+        }
     }
 }
