@@ -1,15 +1,13 @@
 package com.adammcneilly.deeplinkhelper
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.adammcneilly.deeplinkhelper.data.DLRepository
 
-class MainActivityViewModel : ViewModel() {
-    private val _deepLinks = MutableLiveData<List<DeepLink>>()
-    val deepLinks: LiveData<List<DeepLink>> = _deepLinks
+class MainActivityViewModel(
+    repository: DLRepository
+) : ViewModel() {
 
-    fun loadData() {
-        val dummyURIs = listOf(DeepLink("myapp://page1"), DeepLink("myapp://page2"))
-        _deepLinks.value = dummyURIs
-    }
+    val deepLinks: LiveData<List<DeepLink>> = repository.getAll()
+
 }
