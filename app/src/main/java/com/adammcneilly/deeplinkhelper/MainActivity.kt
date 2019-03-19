@@ -59,13 +59,16 @@ class MainActivity : AppCompatActivity() {
         viewModel.deepLinks.observe(this, Observer {
             it?.let(adapter::deepLinks::set)
         })
+
+        viewModel.inputText.observe(this, Observer {
+            uriInput?.setText(it)
+        })
     }
 
     private fun setupSendButton() {
         findViewById<Button>(R.id.send_button).setOnClickListener {
             val input = uriInput?.text.toString()
             viewModel.deepLinkSent(input)
-            uriInput?.setText("")
         }
     }
 }
