@@ -1,12 +1,17 @@
 package com.adammcneilly.deeplinkhelper
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adammcneilly.deeplinkhelper.data.DLDatabase
@@ -49,6 +54,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         val recyclerView = findViewById<RecyclerView>(R.id.deep_link_list)
+        recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
     }
@@ -69,6 +75,16 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.send_button).setOnClickListener {
             val input = uriInput?.text.toString()
             viewModel.deepLinkSent(input)
+            launchUri(input)
+        }
+    }
+
+    private fun launchUri(input: String) {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(input))
+            startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(this, R.string.no_apps_available, Toast.LENGTH_SHORT).show()
         }
     }
 }
