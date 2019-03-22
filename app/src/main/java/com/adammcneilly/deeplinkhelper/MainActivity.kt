@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.adammcneilly.deeplinkhelper.data.DLDatabase
 import com.adammcneilly.deeplinkhelper.data.DLRepository
 import com.google.android.material.textfield.TextInputEditText
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 class MainActivity : AppCompatActivity() {
     private val adapter = DeepLinkAdapter(this::deepLinkClicked)
@@ -48,6 +50,16 @@ class MainActivity : AppCompatActivity() {
         setupSendButton()
     }
 
+    override fun onResume() {
+        super.onResume()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        EventBus.getDefault().unregister(this)
+    }
+
     private fun setupViews() {
         uriInput = findViewById(R.id.uri_input)
     }
@@ -69,19 +81,28 @@ class MainActivity : AppCompatActivity() {
         viewModel.inputText.observe(this, Observer {
             uriInput?.setText(it)
         })
+
+        viewModel.inputErrorRes.observe(this, Observer {
+            val errorString = it?.let(this::getString)
+            uriInput?.error = errorString
+        })
     }
 
     private fun setupSendButton() {
         findViewById<Button>(R.id.send_button).setOnClickListener {
             val input = uriInput?.text.toString()
-            viewModel.deepLinkSent(input)
-            launchUri(input)
+            viewModel.processDeepLink(input)
         }
     }
 
-    private fun launchUri(input: String) {
+    @Subscribe
+    fun onDeepLinkProcessed(deepLink: DeepLink) {
+        launchUri(deepLink.uri)
+    }
+
+    private fun launchUri(uri: String) {
         try {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(input))
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
             startActivity(intent)
         } catch (e: ActivityNotFoundException) {
             Toast.makeText(this, R.string.no_apps_available, Toast.LENGTH_SHORT).show()
