@@ -77,18 +77,27 @@ class MainActivity : AppCompatActivity() {
         viewModel =
             ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel::class.java)
 
-        viewModel.deepLinks.observe(this, Observer {
-            it?.let(adapter::deepLinks::set)
-        })
+        viewModel.deepLinks.observe(
+            this,
+            Observer {
+                it?.let(adapter::deepLinks::set)
+            }
+        )
 
-        viewModel.inputText.observe(this, Observer {
-            uriInput?.setText(it)
-        })
+        viewModel.inputText.observe(
+            this,
+            Observer {
+                uriInput?.setText(it)
+            }
+        )
 
-        viewModel.inputErrorRes.observe(this, Observer {
-            val errorString = it?.let(this::getString)
-            uriInput?.error = errorString
-        })
+        viewModel.inputErrorRes.observe(
+            this,
+            Observer {
+                val errorString = it?.let(this::getString)
+                uriInput?.error = errorString
+            }
+        )
     }
 
     private fun setupSendButton() {
@@ -99,7 +108,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Subscribe
-     fun onDeepLinkProcessed(deepLink: DeepLink) {
+    fun onDeepLinkProcessed(deepLink: DeepLink) {
         launchUri(deepLink.uri)
     }
 
