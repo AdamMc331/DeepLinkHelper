@@ -10,4 +10,4 @@ android:
 
 script:
   - chmod +x gradlew
-  - ./gradlew clean build ktlintCheck
+  - ./gradlew clean build test ktlintCheck
