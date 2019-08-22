@@ -74,7 +74,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel::class.java)
+        viewModel =
+            ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel::class.java)
 
         viewModel.deepLinks.observe(this, Observer {
             it?.let(adapter::deepLinks::set)
@@ -98,7 +99,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Subscribe
-    fun onDeepLinkProcessed(deepLink: DeepLink) {
+     fun onDeepLinkProcessed(deepLink: DeepLink) {
         launchUri(deepLink.uri)
     }
 
