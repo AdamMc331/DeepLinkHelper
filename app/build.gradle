@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'org.jlleitschuh.gradle.ktlint'
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -22,6 +24,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+}
+
+ktlint {
+    enableExperimentalRules = true
 }
 
 dependencies {
